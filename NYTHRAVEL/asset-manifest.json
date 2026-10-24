@@ -1,0 +1,18 @@
+{
+  "version": "6.0.1",
+  "timeoutMs": 12000,
+  "styles": ["style.css"],
+  "scripts": [
+    "progression-rules.js", "world-rules.js", "catalogue.js", "economy.js",
+    "balance-config.js", "game.js", "enhancements.js", "balance.js", "interface.js",
+    "economy-runtime.js", "world-runtime.js", "audio.js", "progression-runtime.js", "visuals.js"
+  ],
+  "images": {
+    "heroes": "assets/v5-heroes.webp",
+    "enemies": "assets/v5-enemies.webp",
+    "bosses": "assets/v5-bosses.webp",
+    "merchant": "assets/v5-merchant.webp",
+    "environment": "assets/v5-environment.webp"
+  },
+  "decorative": ["assets/nythravel-logo.svg", "assets/nythravel-background.webp"]
+}

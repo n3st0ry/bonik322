@@ -2,7 +2,7 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=r
 const {createGameServer}=require('../server');
 (async()=>{const app=createGameServer();await new Promise(r=>app.server.listen(0,'127.0.0.1',r));const url=`http://127.0.0.1:${app.server.address().port}`;
  const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||(fs.existsSync('/usr/bin/chromium')?'/usr/bin/chromium':undefined),args:['--no-sandbox']});const errors=[];
- const page=async(dpr=1)=>{const context=await browser.newContext({viewport:{width:1440,height:900},deviceScaleFactor:dpr}),p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));await p.goto(url);await p.waitForFunction(()=>$('bootScreen').hidden);return p;};const wait=(p,f,arg=null)=>p.waitForFunction(f,arg,{timeout:12000});
+ const page=async(dpr=1)=>{const context=await browser.newContext({viewport:{width:1440,height:900},deviceScaleFactor:dpr}),p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));await p.goto(url);await p.waitForFunction(()=>document.getElementById('bootScreen')?.hidden===true);return p;};const wait=(p,f,arg=null)=>p.waitForFunction(f,arg,{timeout:12000});
  try{
  const solo=await page(2);await solo.getByRole('button',{name:'Одиночная игра',exact:true}).click();await wait(solo,()=>state==='play'&&N.length===480);
  assert.deepEqual(await solo.evaluate(()=>({width:WW,height:WH,art:Object.keys(V5Art).length,nodes:N.length})),{width:7200,height:4800,art:5,nodes:480});

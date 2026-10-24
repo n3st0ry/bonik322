@@ -7,9 +7,12 @@
 <link rel="icon" type="image/svg+xml" href="assets/nythravel-favicon.svg">
 <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
-<link rel="stylesheet" href="style.css"><script>addEventListener('error',()=>{const screen=document.getElementById('bootScreen');if(screen&&!screen.hidden){window.nythravelBootFailed=true;document.getElementById('bootError').textContent='NYTHRAVEL не удалось загрузить все файлы. Запустите npm start и обновите страницу.';document.getElementById('bootRetry').hidden=false;document.getElementById('wrap').inert=false;}},true);</script></head><body>
+<meta name="nythravel-build" content="6.0.1">
+<style>body{margin:0;background:#080d20;color:#d4dcef;font:14px system-ui}#bootScreen{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#10172e;text-align:center;padding:24px}#bootScreen[hidden],#bootHelp[hidden]{display:none}#bootScreen>img{width:min(700px,90vw)}#bootError{max-width:750px;line-height:1.7;color:#e8adbd}#bootHelp{max-width:650px;line-height:1.8}#bootHelp a{color:#b5d6ff}#bootProgress{width:min(350px,80vw);margin:15px}#bootRetry{padding:10px 18px;margin:15px}</style>
+<script src="boot.js?v=6.0.1" onerror="document.addEventListener('DOMContentLoaded',()=>{document.getElementById('bootError').textContent='Не загружен boot.js. Распакуйте архив целиком и запустите сервер из этой папки через START_NYTHRAVEL.bat или npm start.';document.getElementById('bootHelp').hidden=false;document.getElementById('bootRetry').hidden=false;})"></script>
+</head><body>
+<div id="bootScreen" role="status" aria-live="polite"><img src="assets/nythravel-logo.svg" alt="NYTHRAVEL"><p id="bootStatus">Открываем кристальные врата…</p><progress id="bootProgress" value="0" max="1"></progress><small id="bootError"></small><div id="bootHelp" hidden><p>На Windows закройте вкладку с файлом и запустите <b>START_NYTHRAVEL.bat</b> в распакованной папке игры. Требуется Node.js 20+.</p><p>Через терминал: <code>npm install</code>, затем <code>npm start</code>. Сервер должен работать из папки этой версии игры.</p><a href="http://localhost:3000/">Открыть игру после запуска сервера</a></div><button id="bootRetry" hidden onclick="location.reload()">Повторить загрузку NYTHRAVEL</button></div>
 <div id="wrap" inert>
-<div id="bootScreen" role="status" aria-live="polite"><img src="assets/nythravel-logo.svg" alt="NYTHRAVEL"><p>Открываем кристальные врата…</p><small id="bootError"></small><button id="bootRetry" hidden onclick="location.reload()">Обновить NYTHRAVEL</button></div>
 <canvas id="c" width="960" height="600"></canvas>
 <div class="ov" id="menu" style="display:flex">
 <h1>⚔️ NYTHRAVEL</h1>
@@ -24,18 +27,4 @@
 <div class="ov" id="shop"></div>
 <div class="ov" id="inv"></div>
 </div>
-<script src="progression-rules.js"></script>
-<script src="world-rules.js"></script>
-<script src="catalogue.js"></script>
-<script src="economy.js"></script>
-<script src="balance-config.js"></script>
-<script src="game.js"></script>
-<script src="enhancements.js"></script>
-<script src="balance.js"></script>
-<script src="interface.js"></script>
-<script src="economy-runtime.js"></script>
-<script src="world-runtime.js"></script>
-<script src="audio.js"></script>
-<script src="progression-runtime.js"></script>
-<script src="visuals.js"></script>
 </body></html>

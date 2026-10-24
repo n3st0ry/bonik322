@@ -1,0 +1,13 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),{spawnSync,execFile}=require('node:child_process');
+const version=require('./package.json').version;
+function openBrowser(address){if(process.argv.includes('--no-open'))return;const command=process.platform==='win32'?['rundll32.exe',['url.dll,FileProtocolHandler',address]]:process.platform==='darwin'?['open',[address]]:['xdg-open',[address]];execFile(command[0],command[1],error=>{if(error)console.log('Откройте в браузере: '+address);});}
+async function main(){if(Number(process.versions.node.split('.')[0])<20)throw Error('Установите Node.js LTS версии 20 или новее.');process.chdir(__dirname);
+ if(!fs.existsSync(path.join(__dirname,'node_modules/ws/package.json'))){console.log('NYTHRAVEL: устанавливаем зависимости сервера…');const install=process.platform==='win32'?spawnSync('cmd.exe',['/d','/s','/c','npm install --omit=dev --no-audit --no-fund'],{cwd:__dirname,stdio:'inherit'}):spawnSync('npm',['install','--omit=dev','--no-audit','--no-fund'],{cwd:__dirname,stdio:'inherit'});if(install.error||install.status!==0)throw Error('Не удалось установить зависимости. Проверьте интернет и выполните npm install в папке игры.');}
+ require('./tools/check-startup').checkProject(__dirname,{audio:false});
+ const port=Number(process.env.PORT||3000);if(!Number.isInteger(port)||port<0||port>65535)throw Error('Некорректный PORT. Используйте число от 1 до 65535.');
+ const app=require('./server').createGameServer();app.server.on('error',async error=>{if(error.code==='EADDRINUSE'){try{const response=await fetch(`http://127.0.0.1:${port}/version.json`,{signal:AbortSignal.timeout(2000),cache:'no-store'}),build=await response.json();if(build.app==='NYTHRAVEL'&&build.version===version){console.log('NYTHRAVEL '+version+' уже запущена.');openBrowser(`http://127.0.0.1:${port}`);app.wss.close();return;}}catch{}console.error('Порт '+port+' занят другой программой или старой версией. Закройте прежнее окно сервера либо задайте другой PORT.');}else console.error('NYTHRAVEL: '+error.message);app.wss.close();process.exitCode=1;});
+ app.server.listen(port,'0.0.0.0',()=>{const address='http://127.0.0.1:'+app.server.address().port;console.log('NYTHRAVEL '+version+': '+address);console.log('Не закрывайте это окно во время игры. Для остановки нажмите Ctrl+C.');for(const addresses of Object.values(require('node:os').networkInterfaces()))for(const a of addresses||[])if(a.family==='IPv4'&&!a.internal)console.log('Для друзей в вашей сети: http://'+a.address+':'+app.server.address().port);openBrowser(address);});
+}
+if(require.main===module)main().catch(error=>{console.error('NYTHRAVEL: '+error.message);process.exitCode=1;});
+module.exports={main};

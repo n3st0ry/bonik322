@@ -5,7 +5,7 @@ const {createGameServer}=require('../server');
 (async()=>{
  const {server,wss}=createGameServer();await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}`;
  const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||(fs.existsSync('/usr/bin/chromium')?'/usr/bin/chromium':undefined),args:['--no-sandbox']});const errors=[];
- const page=async(width=1440,height=900)=>{const c=await browser.newContext({viewport:{width,height}}),p=await c.newPage();p.on('pageerror',e=>{errors.push(e.message);console.error('BROWSER:',e.message);});await p.goto(base);return p;};
+ const page=async(width=1440,height=900)=>{const c=await browser.newContext({viewport:{width,height}}),p=await c.newPage();p.on('pageerror',e=>{errors.push(e.message);console.error('BROWSER:',e.message);});await p.goto(base);await p.waitForFunction(()=>document.getElementById('bootScreen')?.hidden===true);return p;};
  const wait=(p,fn)=>p.waitForFunction(fn,null,{timeout:10000});
  try{
  const p=await page();await p.waitForTimeout(1000);await p.screenshot({path:'test-results/menu-v3.png'});

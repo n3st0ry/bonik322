@@ -6,6 +6,8 @@ const crypto = require('node:crypto');
 const WebSocket = require('ws');
 const {Economy}=require('./economy');
 const World=require('./world-rules');
+const build=require('./asset-manifest.json'),packageInfo=require('./package.json');
+if(build.version!==packageInfo.version)throw Error('NYTHRAVEL: package.json и asset-manifest.json имеют разные версии. Распакуйте архив целиком.');
 const files = {'/':'rpg.html','/rpg.html':'rpg.html','/game.js':'game.js','/enhancements.js':'enhancements.js','/style.css':'style.css','/balance-config.js':'balance-config.js','/balance.js':'balance.js','/interface.js':'interface.js','/assets/nythravel-logo.svg':'assets/nythravel-logo.svg','/assets/nythravel-favicon.svg':'assets/nythravel-favicon.svg','/assets/nythravel-icon-192.png':'assets/nythravel-icon-192.png','/assets/nythravel-background.webp':'assets/nythravel-background.webp','/favicon.ico':'assets/nythravel-favicon.ico','/site.webmanifest':'site.webmanifest','/catalogue.js':'catalogue.js','/economy.js':'economy.js','/economy-runtime.js':'economy-runtime.js'};
 function createGameServer() {
   const rooms = new Map();
@@ -13,11 +15,12 @@ function createGameServer() {
   const server = http.createServer((req,res) => {
     let pathname;
     try { pathname = new URL(req.url,'http://localhost').pathname; } catch {res.writeHead(400);return res.end();}
-    const dynamic=/^\/assets\/(?:v5-[a-z-]+\.webp|audio\/[a-z0-9-]+\.wav)$/.test(pathname)?pathname.slice(1):null;const moduleFile=['/world-rules.js','/world-runtime.js','/audio.js','/visuals.js','/progression-rules.js','/progression-runtime.js'].includes(pathname)?pathname.slice(1):null;const file=files[pathname]||dynamic||moduleFile;
+    if(pathname==='/version.json'){res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});return res.end(JSON.stringify({app:'NYTHRAVEL',version:build.version}));}
+    const dynamic=/^\/assets\/(?:v5-[a-z-]+\.webp|audio\/[a-z0-9-]+\.wav)$/.test(pathname)?pathname.slice(1):null;const moduleFile=['/world-rules.js','/world-runtime.js','/audio.js','/visuals.js','/boot.js','/asset-manifest.json','/progression-rules.js','/progression-runtime.js'].includes(pathname)?pathname.slice(1):null;const file=files[pathname]||dynamic||moduleFile;
     if (!file || !['GET','HEAD'].includes(req.method)) {res.writeHead(404);return res.end('NYTHRAVEL: Not found');}
     fs.readFile(path.join(__dirname,file),(err,data)=>{
-      if(err){res.writeHead(500);return res.end('NYTHRAVEL: Unable to load game files');}
-      res.writeHead(200,{'Content-Type':({'.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.ico':'image/x-icon','.wav':'audio/wav','.webmanifest':'application/manifest+json','.html':'text/html; charset=utf-8'})[path.extname(file)]||'application/octet-stream','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});
+      if(err){console.error('NYTHRAVEL: '+file+': '+err.message);res.writeHead(err.code==='ENOENT'?404:500,{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'});return res.end('NYTHRAVEL: Unable to load '+file);}
+      res.writeHead(200,{'Content-Type':({'.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.ico':'image/x-icon','.wav':'audio/wav','.json':'application/json; charset=utf-8','.webmanifest':'application/manifest+json','.html':'text/html; charset=utf-8'})[path.extname(file)]||'application/octet-stream','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});
       res.end(req.method==='HEAD'?undefined:data);
     });
   });

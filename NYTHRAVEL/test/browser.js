@@ -4,7 +4,7 @@ const {createGameServer}=require('../server');
 (async()=>{
  const {server,wss}=createGameServer();await new Promise(r=>server.listen(0,'127.0.0.1',r));const url=`http://127.0.0.1:${server.address().port}`;
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||(require('node:fs').existsSync('/usr/bin/chromium')?'/usr/bin/chromium':undefined),headless:true,args:['--no-sandbox']});const errors=[];
- const page=async(w=1920,h=1080,dpr=1)=>{const c=await browser.newContext({viewport:{width:w,height:h},deviceScaleFactor:dpr});const p=await c.newPage();p.on('pageerror',e=>{errors.push(e.message);console.error('BROWSER:',e.message);});await p.goto(url);return p;};
+ const page=async(w=1920,h=1080,dpr=1)=>{const c=await browser.newContext({viewport:{width:w,height:h},deviceScaleFactor:dpr});const p=await c.newPage();p.on('pageerror',e=>{errors.push(e.message);console.error('BROWSER:',e.message);});await p.goto(url);await p.waitForFunction(()=>document.getElementById('bootScreen')?.hidden===true);return p;};
  const wait=async(p,f)=>p.waitForFunction(f,null,{timeout:10000});
  try{
  const solo=await page();await solo.getByRole('button',{name:'Одиночная игра',exact:true}).click();await wait(solo,()=>state==='play');
