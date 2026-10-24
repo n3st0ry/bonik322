@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NYTHRAVEL — Co-op RPG</title>
+<meta name="application-name" content="NYTHRAVEL">
+<meta name="theme-color" content="#11132b">
+<link rel="icon" type="image/svg+xml" href="assets/nythravel-favicon.svg">
+<link rel="alternate icon" type="image/x-icon" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
+<link rel="stylesheet" href="style.css"><script>addEventListener('error',()=>{const screen=document.getElementById('bootScreen');if(screen&&!screen.hidden){window.nythravelBootFailed=true;document.getElementById('bootError').textContent='NYTHRAVEL не удалось загрузить все файлы. Запустите npm start и обновите страницу.';document.getElementById('bootRetry').hidden=false;document.getElementById('wrap').inert=false;}},true);</script></head><body>
+<div id="wrap" inert>
+<div id="bootScreen" role="status" aria-live="polite"><img src="assets/nythravel-logo.svg" alt="NYTHRAVEL"><p>Открываем кристальные врата…</p><small id="bootError"></small><button id="bootRetry" hidden onclick="location.reload()">Обновить NYTHRAVEL</button></div>
+<canvas id="c" width="960" height="600"></canvas>
+<div class="ov" id="menu" style="display:flex">
+<h1>⚔️ NYTHRAVEL</h1>
+<p>2D экшен-RPG: до 3 игроков по сети, волны врагов, усиленные мобы и 7 мини-боссов, фарм ресурсов, древо навыков и кузница.</p>
+<p><b style="color:#4aa3ff">Одиночная игра:</b> WASD — ходьба, F или ЛКМ — удар по курсору, Q / E / R — навыки<br><b style="color:#ff6a8a">Локальный игрок 2:</b> стрелки — ходьба, Enter — удар, I / O / P — навыки<br><b>В сетевой игре каждый игрок на своём устройстве использует WASD, F/ЛКМ и Q / E / R — каждый управляет только своим персонажем.</b><br><b>C</b> / <b>U</b> — смена оружия в локальном режиме; в сетевой игре <b>C</b> — смена оружия.<br><b>T</b> — древо навыков и кузница (пауза) · <b>B</b> — магазин снаряжения</p>
+<p><small>Бейте деревья и камни, собирайте добычу, прокачивайтесь. В кооперативе игроки делят опыт и не могут разбежаться за пределы экрана.</small></p>
+<div><button onclick="start(0)">1 игрок</button><button onclick="start(1)">2 игрока (один экран)</button><button onclick='netMenu()'>🌐 По сети (LAN)</button></div>
+</div>
+<div class='ov' id='net'><h1>🌐 Кооператив по сети</h1><p>Для игры на разных устройствах используйте «Через сервер (LAN)»: все устройства должны быть в одной Wi‑Fi сети и открыть один адрес. Режим с кодами зависит от поддержки WebRTC/NAT и может не работать через интернет.</p><p><small>Хозяин: «Я хозяин» → отправьте код гостю → вставьте ответ → «Подключить».<br>Гость: «Я гость» → вставьте код хозяина → «Подключить» → отправьте ответ хозяину.</small></p><div><button onclick='netHost()'>Я хозяин</button><button onclick='netJoin()'>Я гость</button></div><p><label for='serverIp'><b>IP сервера:</b></label><br><input id='serverIp' value='' placeholder='например 192.168.1.100:3000' style='width:min(360px,85%);padding:10px;border-radius:8px;border:1px solid #667;background:#111722;color:#fff'><br><small>Введи IP компьютера, где запущен server.js, затем нажми кнопку ниже. Можно указать домен или IP:порт.</small></p><div><button onclick='netServer()'>🔌 Подключиться по IP</button></div><div><button onclick='netRoom(1)'>🌍 Создать комнату</button><button onclick='netRoom(0)'>🔑 Войти по коду</button></div><p><small>«Комната» доступна только в среде, где есть встроенный сервис комнат. В обычном HTML-файле используйте «Через сервер (LAN)».</small></p><p><small>Хозяин рассчитывает общий игровой мир. Все действия гостя (движение, атаки, навыки, экипировка и инвентарь) отправляются хозяину; полное состояние игроков и мира возвращается всем участникам. На компьютере-хозяине: npm install ws → node server.js. Для интернета порт сервера должен быть доступен извне.</small></p><p id='nst'></p><textarea id='ncode' readonly rows='3' style='width:min(560px,92%)'></textarea><div><button onclick='cpy()'>Копировать код</button></div><textarea id='nin' rows='3' placeholder='Вставьте сюда код от другого игрока' style='width:min(560px,92%)'></textarea><div><button onclick='netApply()'>Подключить</button><button onclick='netBack()'>Назад</button></div></div>
+<div class="ov" id="over"><h1>Поражение</h1><p id="ovs"></p><button onclick="start(coop)">Заново</button><button onclick="location.reload()">В меню</button></div>
+<div class="ov" id="tree"></div>
+<div class="ov" id="shop"></div>
+<div class="ov" id="inv"></div>
+</div>
+<script src="progression-rules.js"></script>
+<script src="world-rules.js"></script>
+<script src="catalogue.js"></script>
+<script src="economy.js"></script>
+<script src="balance-config.js"></script>
+<script src="game.js"></script>
+<script src="enhancements.js"></script>
+<script src="balance.js"></script>
+<script src="interface.js"></script>
+<script src="economy-runtime.js"></script>
+<script src="world-runtime.js"></script>
+<script src="audio.js"></script>
+<script src="progression-runtime.js"></script>
+<script src="visuals.js"></script>
+</body></html>

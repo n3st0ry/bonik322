@@ -1,0 +1,25 @@
+{
+  "name": "nythravel",
+  "version": "6.0.0",
+  "private": true,
+  "description": "NYTHRAVEL — cooperative dark fantasy RPG",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/*.test.js",
+    "test:browser": "node test/browser.js",
+    "check": "node --check server.js && node --check game.js && node --check enhancements.js && node --check balance-config.js && node --check balance.js && node --check interface.js && node --check catalogue.js && node --check economy.js && node --check economy-runtime.js && node --check world-rules.js && node --check world-runtime.js && node --check audio.js && node --check visuals.js && node --check progression-rules.js && node --check progression-runtime.js",
+    "test:tactical": "node test/tactical-browser.js",
+    "test:nythravel": "node test/nythravel-browser.js",
+    "test:world": "node test/world-browser.js",
+    "test:progression": "node test/progression-browser.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.1"
+  }
+}
