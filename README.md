@@ -1,14 +1,15 @@
-# Realm of Shards — готовый проект
+# Realm of Shards — подключение по IP без кода
 
-[Скачать Realm_of_Shards_Updated.zip](https://github.com/n3st0ry/bonik322/raw/refs/heads/download/realm-of-shards-updated/Realm_of_Shards_Updated.zip)
+[Скачать готовый ZIP](https://github.com/n3st0ry/bonik322/raw/refs/heads/download/realm-of-shards-updated/Realm_of_Shards_Updated.zip)
 
-Распакуйте архив, откройте терминал в папке Realm_of_Shards и выполните:
+Распакуйте архив. В папке Realm_of_Shards выполните `npm install`, затем `npm start` (Node.js 20+).
 
-```sh
-npm install
-npm start
-```
+- Хозяин: откройте игру → Мультиплеер → **Создать игру по IP**.
+- Гости: откройте в браузере `http://IP-ХОЗЯИНА:3000` → Мультиплеер → введите IP сервера → **Подключиться по IP**. Код комнаты не нужен.
+- Хозяин нажимает **Начать игру**. До трёх игроков.
 
-Требуется Node.js 20+. Инструкция Windows и отчёт о проверках находятся внутри архива.
+Адрес для друзей сервер выводит в терминале. Устройства должны быть в одной сети или иметь доступ к серверу; разрешите Node.js в брандмауэре Windows. Для интернета отдельно настраивается доступность сервера.
 
-SHA-256: `130ae48ca0af5fdff6b46e4e7c74bd890c10e64937560a4bd8b275fc203ffe6d`.
+Полная инструкция Windows, обычные комнаты с кодами и отчёт о проверках включены в ZIP.
+
+SHA-256: `d4f2c8251fdf74c0dca6f73f1b4f079b9d20f07fd2f58700aedb8c1caafd7f4a`.
